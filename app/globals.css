@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+
+@layer base {
+  :root {
+    /* Light mode - Clean, minimal white background */
+    --background: oklch(0.985 0 0);
+    --foreground: oklch(0.165 0.01 260);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.165 0.01 260);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.165 0.01 260);
+    
+    /* Primary color - Modern blue */
+    --primary: oklch(0.52 0.14 262.8);
+    --primary-foreground: oklch(0.98 0.01 0);
+    
+    /* Secondary - Subtle gray for alternating sections */
+    --secondary: oklch(0.97 0.002 0);
+    --secondary-foreground: oklch(0.165 0.01 260);
+    
+    /* Muted colors */
+    --muted: oklch(0.92 0.002 0);
+    --muted-foreground: oklch(0.48 0.04 260);
+    
+    --accent: oklch(0.52 0.14 262.8);
+    --accent-foreground: oklch(0.98 0.01 0);
+    
+    --destructive: oklch(0.57 0.245 27.325);
+    --destructive-foreground: oklch(0.98 0.01 0);
+    
+    --border: oklch(74.927% 0.00226 15.135);
+    --input: oklch(0.97 0.002 0);
+    --ring: oklch(0.52 0.14 262.8);
+    
+    --chart-1: oklch(0.52 0.14 262.8);
+    --chart-2: oklch(0.63 0.16 300);
+    --chart-3: oklch(0.65 0.12 350);
+    --chart-4: oklch(0.72 0.14 180);
+    --chart-5: oklch(0.58 0.15 280);
+    
+    --radius: 0.5rem;
+    
+    --sidebar: oklch(0.98 0.01 0);
+    --sidebar-foreground: oklch(0.165 0.01 260);
+    --sidebar-primary: oklch(0.52 0.14 262.8);
+    --sidebar-primary-foreground: oklch(0.98 0.01 0);
+    --sidebar-accent: oklch(0.92 0.002 0);
+    --sidebar-accent-foreground: oklch(0.165 0.01 260);
+    --sidebar-border: oklch(0.92 0.002 0);
+    --sidebar-ring: oklch(0.52 0.14 262.8);
+  }
+  
+  .dark {
+    /* Dark mode - Deep navy background */
+    --background: oklch(0.15 0.01 260);
+    --foreground: oklch(0.95 0.01 0);
+    --card: oklch(0.20 0.01 260);
+    --card-foreground: oklch(0.95 0.01 0);
+    --popover: oklch(0.18 0.01 260);
+    --popover-foreground: oklch(0.95 0.01 0);
+    
+    /* Primary color - Bright blue for dark mode */
+    --primary: oklch(0.65 0.17 260);
+    --primary-foreground: oklch(0.15 0.01 260);
+    
+    /* Secondary - Slightly lighter than background */
+    --secondary: oklch(0.22 0.01 260);
+    --secondary-foreground: oklch(0.92 0.01 0);
+    
+    /* Muted colors */
+    --muted: oklch(0.32 0.02 260);
+    --muted-foreground: oklch(0.72 0.04 260);
+    
+    --accent: oklch(0.65 0.17 260);
+    --accent-foreground: oklch(0.15 0.01 260);
+    
+    --destructive: oklch(0.62 0.23 27.325);
+    --destructive-foreground: oklch(0.15 0.01 260);
+    
+    --border: oklch(0.28 0.02 260);
+    --input: oklch(0.25 0.01 260);
+    --ring: oklch(0.65 0.17 260);
+    
+    --chart-1: oklch(0.65 0.17 260);
+    --chart-2: oklch(0.72 0.16 300);
+    --chart-3: oklch(0.7 0.14 350);
+    --chart-4: oklch(0.75 0.15 180);
+    --chart-5: oklch(0.68 0.16 280);
+    
+    --sidebar: oklch(0.18 0.01 260);
+    --sidebar-foreground: oklch(0.95 0.01 0);
+    --sidebar-primary: oklch(0.65 0.17 260);
+    --sidebar-primary-foreground: oklch(0.15 0.01 260);
+    --sidebar-accent: oklch(0.28 0.02 260);
+    --sidebar-accent-foreground: oklch(0.95 0.01 0);
+    --sidebar-border: oklch(0.28 0.02 260);
+    --sidebar-ring: oklch(0.65 0.17 260);
+  }
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-primary: var(--primary);
+  --color-ring: hsl(var(--ring));
+  --color-border: var(--border);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+  }
+  
+  /* Typography optimization */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-balance;
+  }
+  
+  p {
+    @apply text-pretty;
+  }
+  
+  /* Link styling */
+  a {
+    @apply transition-colors;
+  }
+  
+  /* Button and interactive elements */
+  button, [role="button"] {
+    @apply transition-all duration-200;
+  }
+}
+
+@layer components {
+  /* Fade in animation for sections */
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Hover effects for cards */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+  }
+  
+  /* Focus visible states for accessibility */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
