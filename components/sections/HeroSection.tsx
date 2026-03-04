@@ -40,7 +40,7 @@ export function HeroSection({ data }: HeroSectionProps) {
           <Button
             onClick={handleScroll}
             size="lg"
-            className="rounded-lg px-8"
+            className="rounded-lg px-8 bg-background border border-foreground hover:text-white hover:bg-primary hover:cursor-pointer"
           >
             {data.cta}
           </Button>
