@@ -62,6 +62,7 @@ export function ContactSection({ data, social }: ContactSectionProps) {
                 key={link.id}
                 asChild
                 variant="outline"
+                className="hover:bg-primary hover:text-white transition-colors hover:border-foreground"
               >
                 <a
                   href={link.url}
