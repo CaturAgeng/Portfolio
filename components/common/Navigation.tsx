@@ -42,8 +42,8 @@ export function Navigation() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <a href="#" className="text-lg font-bold text-foreground" aria-label="Portfolio home">
-            Portfolio
+          <a href="#" className="text-lg font-bold text-foreground" aria-label="My Portfolio">
+            My Portfolio
           </a>
 
           {/* Desktop Navigation */}
@@ -53,7 +53,7 @@ export function Navigation() {
                 key={item.label}
                 href={item.href}
                 onClick={handleNavClick}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-4 transition-colors"
                 role="menuitem"
               >
                 {item.label}
@@ -63,7 +63,7 @@ export function Navigation() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-foreground"
+            className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:text-primary"
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
