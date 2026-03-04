@@ -25,7 +25,7 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
           {data.map((project) => (
             <Card key={project.id} className="flex flex-col overflow-hidden card-hover">
               {/* Project Image Placeholder */}
-              <div className="h-48 bg-gradient-to-br from-muted to-muted-foreground/20 flex items-center justify-center text-muted-foreground">
+              <div className="h-48 bg-linear-to-br from-muted to-muted-foreground/20 flex items-center justify-center text-muted-foreground">
                 <span className="text-sm">{project.title}</span>
               </div>
 
@@ -42,6 +42,16 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {project.description}
                 </p>
+
+                {/* Job Description */}
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-foreground">Job Description:</p>
+                  <p className="text-sm text-muted-foreground flex flex-col gap-1">
+                    {project.jobdesk.map((item, index) => (
+                      <span key={index}>{item}</span>
+                    ))}
+                  </p>
+                </div>
 
                 {/* Technologies */}
                 <div className="space-y-2">
