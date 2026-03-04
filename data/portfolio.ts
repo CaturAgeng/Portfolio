@@ -2,8 +2,8 @@ import { PortfolioContent } from '@/types';
 
 export const portfolioData: PortfolioContent = {
   hero: {
-    name: 'Your Name',
-    title: 'Full Stack Developer & QA Engineer',
+    name: 'Catur Ageng Pinaringan',
+    title: 'Software Developer & QA Engineer',
     subtitle: 'Building robust web applications with clean code and comprehensive testing practices. Passionate about creating seamless user experiences backed by quality assurance.',
     cta: 'View My Work',
   },
