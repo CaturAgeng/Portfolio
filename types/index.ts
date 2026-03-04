@@ -5,6 +5,7 @@ export interface Project {
   description: string;
   shortDescription: string;
   image: string;
+  jobdesk: string[];
   technologies: string[];
   link?: string;
   github?: string;
