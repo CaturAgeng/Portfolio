@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { SectionContainer } from '@/components/common/SectionContainer';
 import { SectionHeading } from '@/components/common/SectionHeading';
 import { PortfolioContent } from '@/types';
+import Image from 'next/image';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 interface ProjectsSectionProps {
   data: PortfolioContent['projects'];
@@ -24,9 +26,25 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
         <div className="grid md:grid-cols-2 gap-8">
           {data.map((project) => (
             <Card key={project.id} className="flex flex-col overflow-hidden card-hover">
-              {/* Project Image Placeholder */}
-              <div className="h-48 bg-linear-to-br from-muted to-muted-foreground/20 flex items-center justify-center text-muted-foreground">
-                <span className="text-sm">{project.title}</span>
+              {/* Project Images Carousel */}
+              <div className="h-96 overflow-hidden">
+                <Carousel className="w-full h-full">
+                  <CarouselContent>
+                    {(Array.isArray(project.image) ? project.image : [project.image]).map((imgSrc, index) => (
+                      <CarouselItem key={index}>
+                        <Image
+                          src={imgSrc}
+                          alt={`${project.title} - Image ${index + 1}`}
+                          width={400}
+                          height={400}
+                          className="w-full h-96 object-cover"
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
               </div>
 
               {/* Card Content */}
