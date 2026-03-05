@@ -70,7 +70,7 @@ export const portfolioData: PortfolioContent = {
       title: 'BeanHub POS App',
       description: 'BeanHub is a point of sale (POS) and inventory management application specifically designed to meet the needs of coffee shop owners in Wonosobo.',
       shortDescription: 'Frontend',
-      image: '/projects/ecommerce.jpg',
+      image: ['/projects/BeanHub/logo.png', '/projects/BeanHub/home-page.png', '/projects/BeanHub/menu-populer.png', '/projects/BeanHub/stok-menu.png'], // Example of multiple images for carousel
       jobdesk: [
         '+ Created a Dashboard page by adding revenue charts and shortcuts to popular menu pages and low stock items.', 
         '+ Created a popular menu page based on the Figma provided.'
@@ -85,7 +85,7 @@ export const portfolioData: PortfolioContent = {
       title: 'SaleMate POS App',
       description: 'SaleMate is a RESTful API designed to empower local businesses by providing comprehensive Inventory Management and Point of Sales (POS) solutions. Our mission is to support local businesses in growing and managing their assets with ease, while also enhancing their online presence, automating marketing efforts, and offering customer relationship management (CRM) tools tailored specifically to their needs.',
       shortDescription: 'Frontend',
-      image: '/projects/taskapp.jpg',
+      image: ['/projects/BeanHub/logo.png', '/projects/BeanHub/home-page.png', '/projects/BeanHub/menu-populer.png', '/projects/BeanHub/stok-menu.png'], // Example of multiple images for carousel // Placeholder image until SaleMate images are added
       jobdesk: [
         '+ Created a GitHub repository for the Frontend team.', 
         '+ Built Tax and Promo pages according to Figma', 
