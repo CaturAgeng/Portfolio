@@ -17,22 +17,22 @@ Gunakan checklist ini untuk memastikan portfolio Anda complete dan ready to depl
 ## Phase 2: Content Customization (TODO - DO THIS FIRST!)
 
 ### Hero Section
-- [ ] Update `hero.name` with your name
-- [ ] Update `hero.title` with your job title
-- [ ] Update `hero.subtitle` with your professional summary
-- [ ] Update `hero.cta` button text if needed
+- [x] Update `hero.name` with your name
+- [x] Update `hero.title` with your job title
+- [x] Update `hero.subtitle` with your professional summary
+- [x] Update `hero.cta` button text if needed
 
 ### About Section
-- [ ] Update `about.title` (if needed)
-- [ ] Replace first paragraph with your bio
-- [ ] Replace second paragraph with your journey/background
-- [ ] Replace third paragraph with personal interests/what you love doing
+- [x] Update `about.title` (if needed)
+- [x] Replace first paragraph with your bio
+- [x] Replace second paragraph with your journey/background
+- [x] Replace third paragraph with personal interests/what you love doing
 
 ### Skills Section
-- [ ] Review skill categories (frontend, backend, QA, tools)
-- [ ] Update each category to match your expertise
-- [ ] Add/remove skills as needed
-- [ ] Ensure accuracy of listed technologies
+- [x] Review skill categories (frontend, backend, QA, tools)
+- [x] Update each category to match your expertise
+- [x] Add/remove skills as needed
+- [x] Ensure accuracy of listed technologies
 
 ### Projects Section
 - [ ] Add your first project (replace or add to existing)
