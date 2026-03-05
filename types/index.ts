@@ -4,7 +4,7 @@ export interface Project {
   title: string;
   description: string;
   shortDescription: string;
-  image: string;
+  image: string | string[]; // Support single image or array of images for carousel
   jobdesk: string[];
   technologies: string[];
   link?: string;
