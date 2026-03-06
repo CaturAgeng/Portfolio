@@ -8,3 +8,19 @@ node_modules/
 .next/
 .env*.local
 .DS_Store
+
+# md FIles
+CLEAN_CODE_Practices.md
+SETUP_INSTRUCTIONS.md
+QUICK_START.md
+PORTFOLIO_GUIDE.md
+PROJECT_SUMMARY.md
+IMPLEMENTATION_CHECKLIST.md
+GETTING_STARTED.md
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
