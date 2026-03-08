@@ -23,9 +23,9 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
         <SectionHeading title="Featured Projects" />
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-8  ">
           {data.map((project) => (
-            <Card key={project.id} className="flex flex-col overflow-hidden card-hover">
+            <Card key={project.id} className="flex flex-col overflow-hidden card-hover bg-orange-900/10 hover:bg-primary/20 transition-colors duration-300">
               {/* Project Images Carousel */}
               <div className="h-96 overflow-hidden">
                 <Carousel className="w-full h-full">
@@ -86,14 +86,14 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
                 {/* Links */}
                 <div className="pt-4 flex gap-3 flex-wrap">
                   {project.link && (
-                    <Button asChild variant="outline" size="sm">
+                    <Button asChild variant="outline" size="sm" className='hover:bg-primary hover:text-primary-foreground hover:text-white'>
                       <a href={project.link} target="_blank" rel="noopener noreferrer">
                         View Project
                       </a>
                     </Button>
                   )}
                   {project.github && (
-                    <Button asChild variant="outline" size="sm">
+                    <Button asChild variant="outline" size="sm" className='hover:bg-primary hover:text-primary-foreground hover:text-white'>
                       <a href={project.github} target="_blank" rel="noopener noreferrer">
                         GitHub
                       </a>
