@@ -85,7 +85,7 @@ export const portfolioData: PortfolioContent = {
       title: 'SaleMate POS App',
       description: 'SaleMate is a RESTful API designed to empower local businesses by providing comprehensive Inventory Management and Point of Sales (POS) solutions. Our mission is to support local businesses in growing and managing their assets with ease, while also enhancing their online presence, automating marketing efforts, and offering customer relationship management (CRM) tools tailored specifically to their needs.',
       shortDescription: 'Frontend',
-      image: ['/projects/BeanHub/logo.png', '/projects/BeanHub/home-page.png', '/projects/BeanHub/menu-populer.png', '/projects/BeanHub/stok-menu.png'], // Example of multiple images for carousel // Placeholder image until SaleMate images are added
+      image: ['/projects/SaleMate/SaleMate-Login.png', '/projects/SaleMate/SaleMate-Dashboard.png', '/projects/SaleMate/SaleMate-API-Doc.jpg'], // Example of multiple images for carousel // Placeholder image until SaleMate images are added
       jobdesk: [
         '+ Created a GitHub repository for the Frontend team.', 
         '+ Built Tax and Promo pages according to Figma', 
