@@ -4,6 +4,7 @@ export const portfolioData: PortfolioContent = {
   hero: {
     name: 'Catur Ageng Pinaringan',
     title: 'Software Developer & QA Engineer',
+    image: '/profile.jpg', // Example of multiple images for carousel
     subtitle: 'Building robust web applications with clean code and comprehensive testing practices. Passionate about creating seamless user experiences backed by quality assurance.',
     cta: 'View My Work',
   },
