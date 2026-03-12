@@ -58,20 +58,35 @@ export function ContactSection({ data, social }: ContactSectionProps) {
           <p className="text-sm text-muted-foreground">Or connect with me on:</p>
           <div className="flex flex-wrap gap-4 justify-center">
             {social.map((link) => (
-              <Button
-                key={link.id}
-                asChild
-                variant="outline"
-                className="hover:bg-primary hover:text-white transition-colors hover:border-foreground"
-              >
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+              <div key={link.id} className="relative inline-block group">
+                <div className='absolute -inset-1 
+                        bg-primary/50 
+                        blur-xl 
+                        rounded-lg 
+                        opacity-30 
+                        group-hover:opacity-100 
+                        transition duration-300'> 
+                </div>
+                <Button
+                  key={link.id}
+                  asChild
+                  variant="outline"
+                  className="relative rounded-lg
+                     hover:bg-primary 
+                     hover:text-white 
+                     transition-all duration-300
+                     cursor-pointer"
                 >
-                  {link.name}
-                </a>
-              </Button>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.name}
+                  </a>
+                </Button>
+
+              </div>
             ))}
           </div>
         </div>
