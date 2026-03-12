@@ -41,6 +41,7 @@ export interface PortfolioContent {
   hero: {
     name: string;
     title: string;
+    image: string;
     subtitle: string;
     cta: string;
   };
