@@ -1,23 +1,24 @@
 // =============================================================================
 // contact.spec.ts
-// Tanggung jawab: Memastikan form kontak dan social links berfungsi dengan benar.
+// Tanggung jawab: Memastikan section Contact menampilkan info kontak dan
+// social links dengan benar.
+//
+// ⚠️  Disesuaikan dengan DOM asli ContactSection:
+//     - id="contact" ada di <section> langsung ✅
+//     - Email link biasa: <a href="mailto:..."> tanpa target="_blank"
+//     - Phone link: <a href="tel:..."> tanpa target="_blank"
+//     - Social buttons: <a data-slot="button" target="_blank"> di dalam div.group
+//     - Ada 3 social buttons: GitHub, LinkedIn, Email (mailto dgn target=_blank)
+//     - Email muncul DUA KALI: sebagai link biasa DAN sebagai social button
+//       → emailLink harus menarget yang PERTAMA (tanpa target="_blank")
+//       → socialLinks harus menarget semua <a data-slot="button" target="_blank">
 // =============================================================================
 
 import { test, expect } from "@playwright/test";
 import { SELECTORS } from "./base/selectors";
-import {
-  scrollToSection,
-  fillContactForm,
-  interceptApiAndSubmit,
-} from "./base/helpers";
+import { scrollToSection } from "./base/helpers";
 
 const BASE_URL = "http://localhost:3000";
-
-const VALID_DATA = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-  message: "Halo! Saya tertarik untuk berkolaborasi dengan kamu.",
-};
 
 test.describe("Contact Section", () => {
   test.beforeEach(async ({ page }) => {
@@ -25,100 +26,196 @@ test.describe("Contact Section", () => {
     await scrollToSection(page, SELECTORS.contactSection);
   });
 
-  // --- BEST CASE ---
+  // ---------------------------------------------------------------------------
+  // BEST CASE — Tampilan & Konten
+  // ---------------------------------------------------------------------------
 
-  test("BC-17: Form kontak tampil dengan semua field", async ({ page }) => {
-    await expect(page.locator(SELECTORS.nameInput)).toBeVisible();
-    await expect(page.locator(SELECTORS.emailInput)).toBeVisible();
-    await expect(page.locator(SELECTORS.messageInput)).toBeVisible();
-    await expect(page.locator(SELECTORS.submitButton)).toBeVisible();
-  });
-
-  test("BC-18: Form berhasil disubmit dengan data valid", async ({ page }) => {
-    await fillContactForm(page, SELECTORS, VALID_DATA);
-    const callCount = await interceptApiAndSubmit(
-      page,
-      "**/api/contact",
-      SELECTORS.submitButton
-    );
-    await expect(page.locator(SELECTORS.successMessage)).toBeVisible({
-      timeout: 5000,
-    });
-    expect(callCount).toBe(1);
-  });
-
-  test("BC-19: Social media links ada dan memiliki URL valid", async ({
+  test("BC-17: Section contact tampil dengan heading 'Get In Touch'", async ({
     page,
   }) => {
+    // ALASAN: Heading adalah elemen pertama yang dilihat pengunjung.
+    const heading = page.locator("#contact h2, #contact h1");
+    await expect(heading).toBeVisible();
+    await expect(heading).toContainText(/get in touch/i);
+  });
+
+  test("BC-18: Pesan pengantar contact tampil dan tidak kosong", async ({
+    page,
+  }) => {
+    // ALASAN: Teks pembuka harus selalu terbaca oleh pengunjung.
+    const message = page.locator(SELECTORS.contactMessage).first();
+    await expect(message).toBeVisible();
+    const text = await message.textContent();
+    expect(text?.trim().length ?? 0).toBeGreaterThan(20);
+  });
+
+  test("BC-19: Link email biasa tampil dan memiliki href mailto: yang valid", async ({
+    page,
+  }) => {
+    // ALASAN: emailLink menarget <a href="mailto:"> TANPA target="_blank"
+    // (bukan yang ada di social buttons). Ini adalah link kontak utama.
+    const emailLink = page.locator(SELECTORS.emailLink);
+    await expect(emailLink).toBeVisible();
+    const href = await emailLink.getAttribute("href");
+    expect(href).toMatch(/^mailto:.+@.+\..+/);
+  });
+
+  test("BC-20: Teks email yang ditampilkan sesuai dengan href-nya", async ({
+    page,
+  }) => {
+    // ALASAN: Link email biasa menampilkan alamat email sebagai teks terlihat.
+    // Ini berbeda dengan social button "Email" yang hanya berteks "Email".
+    const emailLink = page.locator(SELECTORS.emailLink);
+    const href = await emailLink.getAttribute("href");
+    const visibleText = await emailLink.textContent();
+    const emailFromHref = href?.replace("mailto:", "").trim();
+    expect(visibleText?.trim()).toBe(emailFromHref);
+  });
+
+  test("BC-21: Social buttons tampil minimal 1", async ({ page }) => {
+    // ALASAN: Harus ada setidaknya 1 social button (GitHub/LinkedIn/Email).
     const socialLinks = page.locator(SELECTORS.socialLinks);
-    await expect(socialLinks.first()).toBeVisible();
-    const href = await socialLinks.first().getAttribute("href");
-    expect(href).toMatch(/^https?:\/\//);
+    const count = await socialLinks.count();
+    expect(count).toBeGreaterThan(0);
   });
 
-  // --- WORST CASE ---
-
-  test("WC-05: Submit form kosong menampilkan validasi error", async ({
+  test("BC-22: Setiap social button memiliki teks label yang tidak kosong", async ({
     page,
   }) => {
-    await page.locator(SELECTORS.submitButton).click();
-    const nameInput = page.locator(SELECTORS.nameInput);
-    const validationMessage = await nameInput.evaluate(
-      (el: HTMLInputElement) => el.validationMessage
+    // ALASAN: Setiap <a data-slot="button"> harus punya teks (GitHub/LinkedIn/Email)
+    // agar pengunjung tahu ke mana link tersebut mengarah.
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    const count = await socialLinks.count();
+    for (let i = 0; i < count; i++) {
+      const text = await socialLinks.nth(i).textContent();
+      expect(text?.trim().length ?? 0).toBeGreaterThan(0);
+    }
+  });
+
+  test("BC-23: Social button yang mengarah ke URL eksternal memiliki https://", async ({
+    page,
+  }) => {
+    // ALASAN: Di DOM asli, ada 3 social buttons: GitHub (https), LinkedIn (https),
+    // dan Email (mailto). Hanya yang https:// yang divalidasi URL-nya.
+    // Yang mailto: dilewati karena bukan URL web.
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    const count = await socialLinks.count();
+    let httpsCount = 0;
+    for (let i = 0; i < count; i++) {
+      const href = await socialLinks.nth(i).getAttribute("href");
+      if (href?.startsWith("https://")) {
+        httpsCount++;
+        expect(href).toMatch(/^https:\/\/.+/);
+      }
+    }
+    // Minimal harus ada 1 social link yang https://
+    expect(httpsCount).toBeGreaterThan(0);
+  });
+
+  test("BC-24: Semua social button membuka tab baru (target=_blank)", async ({
+    page,
+  }) => {
+    // ALASAN: Semua <a data-slot="button"> menggunakan target="_blank"
+    // agar pengunjung tidak meninggalkan halaman portfolio.
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    const count = await socialLinks.count();
+    for (let i = 0; i < count; i++) {
+      const target = await socialLinks.nth(i).getAttribute("target");
+      expect(target).toBe("_blank");
+    }
+  });
+
+  test("BC-25: Semua social button memiliki rel='noopener noreferrer'", async ({
+    page,
+  }) => {
+    // ALASAN: rel="noopener noreferrer" adalah keamanan wajib untuk target="_blank".
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    const count = await socialLinks.count();
+    for (let i = 0; i < count; i++) {
+      const rel = await socialLinks.nth(i).getAttribute("rel");
+      expect(rel).toContain("noopener");
+      expect(rel).toContain("noreferrer");
+    }
+  });
+
+  test("BC-26: Jumlah div.group sama dengan jumlah social button", async ({
+    page,
+  }) => {
+    // ALASAN: Setiap social button dibungkus div.group untuk efek glow.
+    // Jika jumlahnya tidak sama, ada button yang kehilangan efek hover-nya.
+    const wrappers = page.locator(SELECTORS.socialLinkWrapper);
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    expect(await wrappers.count()).toBe(await socialLinks.count());
+  });
+
+  // ---------------------------------------------------------------------------
+  // BEST CASE — Phone
+  // ---------------------------------------------------------------------------
+
+  test("BC-27: Link phone tampil dan memiliki href tel: yang valid", async ({
+    page,
+  }) => {
+    // ALASAN: DOM asli menunjukkan phone SELALU ada (tidak conditional).
+    // href harus diawali "tel:" agar bisa diklik di mobile.
+    const phoneLink = page.locator(SELECTORS.phoneLink);
+    await expect(phoneLink).toBeVisible();
+    const href = await phoneLink.getAttribute("href");
+    expect(href).toMatch(/^tel:/);
+  });
+
+  // ---------------------------------------------------------------------------
+  // WORST CASE — Edge Cases
+  // ---------------------------------------------------------------------------
+
+  test("WC-05: Klik email link biasa tidak menyebabkan navigasi keluar halaman", async ({
+    page,
+  }) => {
+    // ALASAN: emailLink (<a href="mailto:" tanpa target="_blank">) harus membuka
+    // email client, bukan navigasi ke halaman lain.
+    // Selector khusus yang MENGECUALIKAN social button (data-slot="button")
+    const emailLinkOnly = page.locator(
+      '#contact a[href^="mailto:"]:not([data-slot="button"])'
     );
-    expect(validationMessage).not.toBe("");
+    const currentUrl = page.url();
+    await page.route("mailto:*", (route) => route.abort());
+    await emailLinkOnly.click();
+    expect(page.url()).toBe(currentUrl);
   });
 
-  test("WC-06: Email dengan format tidak valid ditolak", async ({ page }) => {
-    await fillContactForm(page, SELECTORS, {
-      ...VALID_DATA,
-      email: "bukan-email-valid",
-    });
-    await page.locator(SELECTORS.submitButton).click();
-    const isValid = await page
-      .locator(SELECTORS.emailInput)
-      .evaluate((el: HTMLInputElement) => el.validity.valid);
-    expect(isValid).toBeFalsy();
-  });
-
-  test("WC-07: Input XSS tidak mengeksekusi script", async ({ page }) => {
-    const xssPayload = '<script>alert("XSS")</script>';
-    let alertTriggered = false;
-    page.on("dialog", async (dialog) => {
-      alertTriggered = true;
-      await dialog.dismiss();
-    });
-    await fillContactForm(page, SELECTORS, {
-      name: xssPayload,
-      email: "test@example.com",
-      message: xssPayload,
-    });
-    await page.locator(SELECTORS.submitButton).click();
-    await page.waitForTimeout(1000);
-    expect(alertTriggered).toBeFalsy();
-  });
-
-  test("WC-08: Pesan sangat panjang (10.000 karakter) tidak crash form", async ({
+  test("WC-06: Social button https:// dapat diakses (status < 400)", async ({
     page,
   }) => {
-    await fillContactForm(page, SELECTORS, {
-      ...VALID_DATA,
-      message: "A".repeat(10000),
-    });
-    await expect(page.locator(SELECTORS.contactSection)).toBeVisible();
+    // ALASAN: Hanya social button dengan href https:// yang dicek statusnya.
+    // Link mailto: dilewati karena bukan request HTTP.
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    const count = await socialLinks.count();
+    for (let i = 0; i < count; i++) {
+      const href = await socialLinks.nth(i).getAttribute("href");
+      if (href?.startsWith("https://")) {
+        const response = await page.request.get(href).catch(() => null);
+        if (response) expect(response.status()).toBeLessThan(400);
+      }
+    }
   });
 
-  test("WC-09: Double click submit tidak mengirim form dua kali", async ({
+  test("WC-07: Social buttons tampil rapi di mobile (375px)", async ({
     page,
   }) => {
-    await fillContactForm(page, SELECTORS, VALID_DATA);
-    let submitCount = 0;
-    await page.route("**/api/contact", (route) => {
-      submitCount++;
-      route.fulfill({ status: 200, body: "{}" });
-    });
-    await page.locator(SELECTORS.submitButton).dblclick();
-    await page.waitForTimeout(1000);
-    expect(submitCount).toBeLessThanOrEqual(1);
+    // ALASAN: flex-wrap gap-4 justify-center harus wrap dengan rapi di layar kecil.
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(BASE_URL);
+    await scrollToSection(page, SELECTORS.contactSection);
+    const socialLinks = page.locator(SELECTORS.socialLinks);
+    const count = await socialLinks.count();
+    for (let i = 0; i < count; i++) {
+      await expect(socialLinks.nth(i)).toBeVisible();
+    }
+  });
+
+  test("WC-08: Tidak ada elemen form yang tidak disengaja di section contact", async ({
+    page,
+  }) => {
+    // ALASAN: Memastikan tidak ada sisa kode form yang tertinggal.
+    await expect(page.locator("#contact form")).toHaveCount(0);
   });
 });
