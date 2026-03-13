@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   //Direktori tempat tes berada
-  testDir: "./tests",
+  testDir: ".",
 
   //Jalankan tes dalam file secara paralel
   fullyParallel: true,
