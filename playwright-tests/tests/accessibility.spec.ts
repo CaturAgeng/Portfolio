@@ -22,18 +22,25 @@ test.describe("Accessibility & SEO", () => {
     }
   });
 
-  test("WC-15: Form input memiliki label atau placeholder", async ({ page }) => {
+  test("WC-15: Semua link interaktif memiliki teks yang terbaca", async ({
+    page,
+  }) => {
+    // ALASAN: Pengganti test form input yang sudah tidak relevan karena
+    // contact section tidak memiliki form. Test ini tetap menjaga aksesibilitas
+    // dengan memastikan setiap <a> punya teks atau aria-label yang bisa dibaca
+    // screen reader — terutama penting untuk social links di contact section.
     await page.goto(BASE_URL);
-    await scrollToSection(page, SELECTORS.contactSection);
-    const inputs = [SELECTORS.nameInput, SELECTORS.emailInput];
-    for (const selector of inputs) {
-      const input = page.locator(selector).first();
-      const id = await input.getAttribute("id");
-      const placeholder = await input.getAttribute("placeholder");
-      const hasLabel = id
-        ? (await page.locator(`label[for="${id}"]`).count()) > 0
-        : false;
-      expect(hasLabel || !!placeholder).toBeTruthy();
+    const links = page.locator("a");
+    const count = await links.count();
+    for (let i = 0; i < count; i++) {
+      const link = links.nth(i);
+      const visibleText = (await link.textContent())?.trim();
+      const ariaLabel = await link.getAttribute("aria-label");
+      const ariaLabelledBy = await link.getAttribute("aria-labelledby");
+      // Link harus punya salah satu: teks terlihat, aria-label, atau aria-labelledby
+      const isAccessible =
+        (visibleText && visibleText.length > 0) || !!ariaLabel || !!ariaLabelledBy;
+      expect(isAccessible).toBeTruthy();
     }
   });
 
